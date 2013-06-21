@@ -88,4 +88,50 @@ describe Tomcat::Manager::Instance do
       @manager_instance.api_version.should == "7"
     end
   end
+
+  describe "can_connect?" do
+    let(:host)           { "my.host"    }
+    let(:port)           { "9001"       }
+    let(:admin_username) { "admin"      }
+    let(:admin_password) { "s3cre7Pas$" }
+
+    describe "for a non-reachable server" do
+      let(:manager_instance) { FactoryGirl.build :instance }
+
+      it "raises an exception" do
+        expect{ manager_instance.can_connect? }.to raise_error
+      end
+    end
+
+    describe "for valid connection credentials" do
+      let(:manager_instance) { FactoryGirl.build :instance, :host => host,
+                                                            :port => port,
+                                                            :admin_username => admin_username,
+                                                            :admin_password => admin_password }
+
+      before :each do
+        FakeWeb.register_uri(:get, "http://#{admin_username}:#{admin_password}@#{host}:#{port}/manager/text/list",
+                                   :body => File.open(File.dirname(__FILE__) + "/../fixtures/application_list.txt", "r").read,
+                                   :status => [ "200", "OK" ])
+      end
+
+      it "returns true" do
+        manager_instance.can_connect?.should be_true
+      end
+    end
+
+    describe "for invalid connection credentials" do
+      let(:manager_instance) { FactoryGirl.build :instance, :host => host, :port => port }
+
+      before :each do
+        FakeWeb.register_uri(:get, "http://#{host}:#{port}/manager/text/list",
+                                   :body => File.open(File.dirname(__FILE__) + "/../fixtures/invalid_connect.html", "r").read,
+                                   :status => [ "401", "Unauthorized" ])
+      end
+
+      it "raises an exception" do
+        expect{ manager_instance.can_connect? }.to raise_error
+      end
+    end
+  end
 end
