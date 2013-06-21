@@ -1,3 +1,5 @@
+Dir[File.expand_path(File.dirname(__FILE__) + '/api/*.rb')].each { |file| require file }
+
 module Tomcat
   module Manager
     module Api
@@ -8,11 +10,18 @@ module Tomcat
         #
         # Examples
         #
-        #   Tomcat::Manager::Api::Version.new :api_version => '11'
+        #   Tomcat::Manager::Api::Version.new :api_version => '7'
         #
         # Returns a Tomcat::Manager::Api::Version.
         #
         def new(version)
+          if self.supported_versions.include? version
+            new_api = self.const_get("Version#{version}").new
+          else
+            raise "Invalid API version - acceptable versions are: #{self.supported_versions}"
+          end
+
+          new_api
         end
 
         def supported_versions
