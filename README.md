@@ -25,6 +25,9 @@ Or install it yourself as:
                                  :manager_password => 'mysu7erP4$$w0RD',
                                  :opts             => { :api_version => "7" }
 
+    # check whether the created server instance can connect to the Tomcat Manager instance
+    server.can_connect?   # true
+
 ## Contributing
 
 1. Fork it
