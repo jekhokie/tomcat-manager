@@ -52,6 +52,19 @@ describe Tomcat::Manager::Instance do
     it "raises error for a missing admin_password" do
       expect{ FactoryGirl.build(:instance, :admin_password => "") }.to raise_error
     end
+
+    # api_version
+    it "returns true for a valid api_version" do
+      expect{ FactoryGirl.build(:instance, :api_version => "7") }.to_not raise_error
+    end
+
+    it "raises error for an unspecified api_version" do
+      expect{ FactoryGirl.build(:instance, :api_version => "") }.to raise_error
+    end
+
+    it "raises error for an unsupported api_version" do
+      expect{ FactoryGirl.build(:instance, :api_version => "X") }.to raise_error
+    end
   end
 
   describe "api_version" do
