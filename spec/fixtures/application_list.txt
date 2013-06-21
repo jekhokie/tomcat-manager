@@ -2,8 +2,8 @@ OK - Listed applications for virtual host localhost
 /:running:0:ROOT
 /manager:running:2:manager
 /docs:running:0:docs
-/test-app-1.0.0:running:0:test-app-1.0.0
+/test-app-1.0.0:running:2:test-app-1.0.0
 /test-app-2.0.1:running:0:test-app-2.0.1
 /other-test-app-1.0.1:stopped:0:other-test-app-1.0.1
-/examples:running:0:examples
+/examples:running:1:examples
 /host-manager:running:0:host-manager
