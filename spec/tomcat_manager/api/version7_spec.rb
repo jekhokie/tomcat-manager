@@ -8,4 +8,18 @@ describe Tomcat::Manager::Api::Version7 do
       end
     end
   end
+
+  context "processing methods" do
+    describe "connect_response_valid?" do
+      let(:api) { FactoryGirl.build :api, :version => "7" }
+
+      it "returns true for a valid response HTTP code" do
+        api.connect_response_valid?("200").should == true
+      end
+
+      it "returns false for an non-OK response HTTP code" do
+        api.connect_response_valid?("abc").should == false
+      end
+    end
+  end
 end
