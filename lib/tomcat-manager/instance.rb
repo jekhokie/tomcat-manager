@@ -61,18 +61,42 @@ module Tomcat
 
       def can_connect?
         begin
-          response = Net::HTTP.start(self.host, self.port) do |http|
-            request = Net::HTTP::Get.new(@api.connect_path)
-            request.basic_auth(self.manager_username, self.manager_password)
-            http.request request
-          end
-
+          response       = get_application_list
           valid_response = @api.connect_response_valid?(response.code)
         rescue Exception => e
           raise e.message
         end
 
         return valid_response
+      end
+
+      def application_list
+        begin
+          raise "Could not connect to server" unless can_connect?
+
+          response         = get_application_list
+          application_hash = @api.deployed_applications(response.body)
+        rescue Exception => e
+          raise e.message
+        end
+
+        return application_hash
+      end
+
+      private
+
+      def get_application_list
+        begin
+          response = Net::HTTP.start(self.host, self.port) do |http|
+            request = Net::HTTP::Get.new(@api.connect_path)
+            request.basic_auth(self.manager_username, self.manager_password)
+            http.request request
+          end
+        rescue Exception => e
+          raise e.message
+        end
+
+        response
       end
     end
   end
