@@ -3,6 +3,7 @@ module Tomcat
     DEFAULT_PORT           = 8080
     DEFAULT_ADMIN_USERNAME = "admin"
     DEFAULT_ADMIN_PASSWORD = "admin"
+    DEFAULT_API_VERSION    = "7"
 
     class Instance
       attr_accessor :host, :port, :admin_username, :admin_password
@@ -13,6 +14,7 @@ module Tomcat
         self.port           = Tomcat::Manager::DEFAULT_PORT
         self.admin_username = Tomcat::Manager::DEFAULT_ADMIN_USERNAME
         self.admin_password = Tomcat::Manager::DEFAULT_ADMIN_PASSWORD
+        @api_version        = DEFAULT_API_VERSION
 
         # assign overrideable attributes
         self.host           = args[:host].to_s           unless args[:host].nil?
@@ -22,6 +24,13 @@ module Tomcat
 
         unless (extra_opts = args[:opts]).nil?
           @api_version = extra_opts[:api_version].to_s if extra_opts[:api_version]
+        end
+
+        begin
+          # build a new API object
+          @api = Tomcat::Manager::Api.new(@api_version)
+        rescue Exception => e
+          raise e.message
         end
 
         self.valid?
