@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :instance, :class => "Tomcat::Manager::Instance" do
-    host           "localhost"
+    host           "my.host"
     port           8280
     admin_username "cool_admin"
     admin_password "sup3rC00lp4$$"
