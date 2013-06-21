@@ -1,4 +1,4 @@
-# Tomcat::Manager
+# Tomcat::Manager [![Build Status](https://travis-ci.org/jekhokie/tomcat-manager.png)](https://travis-ci.org/jekhokie/tomcat-manager)
 
 Provide an API to manage an Apache Tomcat Web Server via the Tomcat Manager.
 
