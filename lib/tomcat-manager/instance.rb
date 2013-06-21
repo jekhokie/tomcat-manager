@@ -1,3 +1,5 @@
+require 'net/http'
+
 module Tomcat
   module Manager
     DEFAULT_PORT           = 8080
@@ -55,6 +57,22 @@ module Tomcat
         rescue Exception => e
           raise e.message
         end
+      end
+
+      def can_connect?
+        begin
+          response = Net::HTTP.start(self.host, self.port) do |http|
+            request = Net::HTTP::Get.new(@api.connect_path)
+            request.basic_auth(self.admin_username, self.admin_password)
+            http.request request
+          end
+
+          valid_response = @api.connect_response_valid?(response.code)
+        rescue Exception => e
+          raise e.message
+        end
+
+        return valid_response
       end
     end
   end
