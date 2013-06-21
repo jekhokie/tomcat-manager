@@ -6,6 +6,7 @@ module Tomcat
 
     class Instance
       attr_accessor :host, :port, :admin_username, :admin_password
+      attr_reader   :api_version, :api
 
       def initialize(args)
         # initialize default attributes
@@ -19,6 +20,10 @@ module Tomcat
         self.admin_username = args[:admin_username].to_s unless args[:admin_username].nil?
         self.admin_password = args[:admin_password].to_s unless args[:admin_password].nil?
 
+        unless (extra_opts = args[:opts]).nil?
+          @api_version = extra_opts[:api_version].to_s if extra_opts[:api_version]
+        end
+
         self.valid?
       end
 
@@ -31,6 +36,16 @@ module Tomcat
         raise ":admin_password cannot be blank"          if admin_password.nil? or admin_password.empty?
 
         true
+      end
+
+      def api_version=(api_version)
+        begin
+          # build a new API object
+          @api         = Tomcat::Manager::Api.new(api_version)
+          @api_version = api_version
+        rescue Exception => e
+          raise e.message
+        end
       end
     end
   end
