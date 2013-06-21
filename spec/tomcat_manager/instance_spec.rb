@@ -53,4 +53,26 @@ describe Tomcat::Manager::Instance do
       expect{ FactoryGirl.build(:instance, :admin_password => "") }.to raise_error
     end
   end
+
+  describe "api_version" do
+    before :each do
+      @manager_instance = FactoryGirl.build :instance
+    end
+
+    it "assigns the corresponding API version when the version exists" do
+      @manager_instance.api_version = "7"
+      @manager_instance.api_version.should == "7"
+    end
+
+    it "raises error when the version does not exist" do
+      expect{ @manager_instance.api_version=("13") }.to raise_error
+    end
+
+    it "retains the previous version when a specified version does not exist" do
+      @manager_instance.stub('api_version=').and_return true
+
+      @manager_instance.api_version = "13"
+      @manager_instance.api_version.should == "7"
+    end
+  end
 end
