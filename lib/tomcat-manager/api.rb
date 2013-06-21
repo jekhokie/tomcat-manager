@@ -14,6 +14,10 @@ module Tomcat
         #
         def new(version)
         end
+
+        def supported_versions
+          [ '7' ]
+        end
       end
     end
   end
