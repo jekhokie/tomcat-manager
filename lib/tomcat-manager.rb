@@ -18,7 +18,8 @@ module Tomcat
       #
       #   Tomcat::Manager.new :host           => 'http://myHost.internal.com',
       #                       :port           => 9090,
-      #                       :admin_password => 'my$ecr3tP4SS'
+      #                       :admin_password => 'my$ecr3tP4SS',
+      #                       :opts           => { :api_version => "7" }
       #
       # Returns a TomcatManager::Instance.
       #
