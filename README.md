@@ -28,6 +28,16 @@ Or install it yourself as:
     # check whether the created server instance can connect to the Tomcat Manager instance
     server.can_connect?   # true
 
+    # obtain a hash of information for all deployed applications
+    server.application_list   # sample output below:
+      #  {
+      #   "/"             => { :status => "running", :sessions => 0, :name => "ROOT"         },
+      #   "/manager"      => { :status => "running", :sessions => 0, :name => "manager"      },
+      #   "/docs"         => { :status => "running", :sessions => 0, :name => "docs"         },
+      #   "/examples"     => { :status => "running", :sessions => 0, :name => "examples"     },
+      #   "/host-manager" => { :status => "running", :sessions => 0, :name => "host-manager" }
+      #  }
+
 ## Contributing
 
 1. Fork it
