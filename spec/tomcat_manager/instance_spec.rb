@@ -10,10 +10,10 @@ describe Tomcat::Manager::Instance do
   describe "attributes" do
     let(:manager_instance) { FactoryGirl.build :instance }
 
-    it { manager_instance.should respond_to(:host)           }
-    it { manager_instance.should respond_to(:port)           }
-    it { manager_instance.should respond_to(:admin_username) }
-    it { manager_instance.should respond_to(:admin_password) }
+    it { manager_instance.should respond_to(:host)             }
+    it { manager_instance.should respond_to(:port)             }
+    it { manager_instance.should respond_to(:manager_username) }
+    it { manager_instance.should respond_to(:manager_password) }
   end
 
   describe "valid?" do
@@ -43,14 +43,14 @@ describe Tomcat::Manager::Instance do
       expect{ FactoryGirl.build(:instance, :port => 70000) }.to raise_error
     end
 
-    # admin_username
-    it "raises error for a missing admin_username" do
-      expect{ FactoryGirl.build(:instance, :admin_username => "") }.to raise_error
+    # manager_username
+    it "raises error for a missing manager_username" do
+      expect{ FactoryGirl.build(:instance, :manager_username => "") }.to raise_error
     end
 
-    # admin_password
-    it "raises error for a missing admin_password" do
-      expect{ FactoryGirl.build(:instance, :admin_password => "") }.to raise_error
+    # manager_password
+    it "raises error for a missing manager_password" do
+      expect{ FactoryGirl.build(:instance, :manager_password => "") }.to raise_error
     end
 
     # api_version
@@ -90,10 +90,10 @@ describe Tomcat::Manager::Instance do
   end
 
   describe "can_connect?" do
-    let(:host)           { "my.host"    }
-    let(:port)           { "9001"       }
-    let(:admin_username) { "admin"      }
-    let(:admin_password) { "s3cre7Pas$" }
+    let(:host)             { "my.host"    }
+    let(:port)             { "9001"       }
+    let(:manager_username) { "admin"      }
+    let(:manager_password) { "s3cre7Pas$" }
 
     describe "for a non-reachable server" do
       let(:manager_instance) { FactoryGirl.build :instance }
@@ -106,11 +106,11 @@ describe Tomcat::Manager::Instance do
     describe "for valid connection credentials" do
       let(:manager_instance) { FactoryGirl.build :instance, :host => host,
                                                             :port => port,
-                                                            :admin_username => admin_username,
-                                                            :admin_password => admin_password }
+                                                            :manager_username => manager_username,
+                                                            :manager_password => manager_password }
 
       before :each do
-        FakeWeb.register_uri(:get, "http://#{admin_username}:#{admin_password}@#{host}:#{port}/manager/text/list",
+        FakeWeb.register_uri(:get, "http://#{manager_username}:#{manager_password}@#{host}:#{port}/manager/text/list",
                                    :body => File.open(File.dirname(__FILE__) + "/../fixtures/application_list.txt", "r").read,
                                    :status => [ "200", "OK" ])
       end

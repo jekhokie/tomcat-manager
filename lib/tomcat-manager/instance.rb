@@ -2,27 +2,27 @@ require 'net/http'
 
 module Tomcat
   module Manager
-    DEFAULT_PORT           = 8080
-    DEFAULT_ADMIN_USERNAME = "admin"
-    DEFAULT_ADMIN_PASSWORD = "admin"
-    DEFAULT_API_VERSION    = "7"
+    DEFAULT_PORT             = 8080
+    DEFAULT_MANAGER_USERNAME = "admin"
+    DEFAULT_MANAGER_PASSWORD = "admin"
+    DEFAULT_API_VERSION      = "7"
 
     class Instance
-      attr_accessor :host, :port, :admin_username, :admin_password
+      attr_accessor :host, :port, :manager_username, :manager_password
       attr_reader   :api_version, :api
 
       def initialize(args)
         # initialize default attributes
-        self.port           = Tomcat::Manager::DEFAULT_PORT
-        self.admin_username = Tomcat::Manager::DEFAULT_ADMIN_USERNAME
-        self.admin_password = Tomcat::Manager::DEFAULT_ADMIN_PASSWORD
-        @api_version        = DEFAULT_API_VERSION
+        self.port             = Tomcat::Manager::DEFAULT_PORT
+        self.manager_username = Tomcat::Manager::DEFAULT_MANAGER_USERNAME
+        self.manager_password = Tomcat::Manager::DEFAULT_MANAGER_PASSWORD
+        @api_version          = DEFAULT_API_VERSION
 
         # assign overrideable attributes
-        self.host           = args[:host].to_s           unless args[:host].nil?
-        self.port           = args[:port].to_i           unless args[:port].nil?
-        self.admin_username = args[:admin_username].to_s unless args[:admin_username].nil?
-        self.admin_password = args[:admin_password].to_s unless args[:admin_password].nil?
+        self.host             = args[:host].to_s           unless args[:host].nil?
+        self.port             = args[:port].to_i           unless args[:port].nil?
+        self.manager_username = args[:manager_username].to_s unless args[:manager_username].nil?
+        self.manager_password = args[:manager_password].to_s unless args[:manager_password].nil?
 
         unless (extra_opts = args[:opts]).nil?
           @api_version = extra_opts[:api_version].to_s if extra_opts[:api_version]
@@ -39,12 +39,12 @@ module Tomcat
       end
 
       def valid?
-        raise "Missing :host Parameter"                  if self.host.nil?      or self.host.empty?
-        raise "Missing or Non-Numeric :port Parameter"   if self.port.nil?      or self.port      == 0 or
-                                                                                   self.port.to_s == ""
-        raise ":port not within range 1 < :port < 65535" if self.port > 65535   or self.port < 1
-        raise ":admin_username cannot be blank"          if admin_username.nil? or admin_username.empty?
-        raise ":admin_password cannot be blank"          if admin_password.nil? or admin_password.empty?
+        raise "Missing :host Parameter"                  if self.host.nil?        or self.host.empty?
+        raise "Missing or Non-Numeric :port Parameter"   if self.port.nil?        or self.port      == 0 or
+                                                                                     self.port.to_s == ""
+        raise ":port not within range 1 < :port < 65535" if self.port > 65535     or self.port < 1
+        raise ":manager_username cannot be blank"        if manager_username.nil? or manager_username.empty?
+        raise ":manager_password cannot be blank"        if manager_password.nil? or manager_password.empty?
 
         true
       end
@@ -63,7 +63,7 @@ module Tomcat
         begin
           response = Net::HTTP.start(self.host, self.port) do |http|
             request = Net::HTTP::Get.new(@api.connect_path)
-            request.basic_auth(self.admin_username, self.admin_password)
+            request.basic_auth(self.manager_username, self.manager_password)
             http.request request
           end
 

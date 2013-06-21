@@ -7,19 +7,19 @@ module Tomcat
     class << self
       # Public: Initializes a new TomcatManager::Instance.
       #
-      # host           - Host on which the Tomcat server is running.
-      # port           - Optional port on which the Tomcat Manager is listening (default = 8080).
-      # admin_user     - Optional username for the administrative user for the Tomcat Manager application (default = admin).
-      # admin_password - Optional password for the administrative user for the Tomcat Manager application (default = admin).
-      # options        - Optional hash used to configure this TomcatManager (default = nil).
-      #                    :api_version - Version of the TomcatManager API to use (drives the schema)
+      # host             - Host on which the Tomcat server is running.
+      # port             - Optional port on which the Tomcat Manager is listening (default = 8080).
+      # manager_user     - Optional username for the administrative user for the Tomcat Manager application (default = admin).
+      # manager_password - Optional password for the administrative user for the Tomcat Manager application (default = admin).
+      # options          - Optional hash used to configure this TomcatManager (default = nil).
+      #                      :api_version - Version of the TomcatManager API to use (drives the schema)
       #
       # Examples
       #
-      #   Tomcat::Manager.new :host           => 'http://myHost.internal.com',
-      #                       :port           => 9090,
-      #                       :admin_password => 'my$ecr3tP4SS',
-      #                       :opts           => { :api_version => "7" }
+      #   Tomcat::Manager.new :host             => 'http://myHost.internal.com',
+      #                       :port             => 9090,
+      #                       :manager_password => 'my$ecr3tP4SS',
+      #                       :opts             => { :api_version => "7" }
       #
       # Returns a TomcatManager::Instance.
       #

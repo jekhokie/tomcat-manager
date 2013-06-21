@@ -19,11 +19,11 @@ Or install it yourself as:
 ## Usage
 
     # create a new Tomcat::Manager Instance for Tomcat
-    server = Tomcat::Manager.new :host           => '192.168.1.56',
-                                 :port           => 9090,
-                                 :admin_username => 'cool_admin',
-                                 :admin_password => 'mysu7erP4$$w0RD',
-                                 :opts           => { :api_version => "7" }
+    server = Tomcat::Manager.new :host             => '192.168.1.56',
+                                 :port             => 9090,
+                                 :manager_username => 'cool_manager',
+                                 :manager_password => 'mysu7erP4$$w0RD',
+                                 :opts             => { :api_version => "7" }
 
 ## Contributing
 
