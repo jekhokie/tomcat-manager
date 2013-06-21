@@ -1,5 +1,6 @@
 require_relative "tomcat-manager/version"
 require_relative "tomcat-manager/instance"
+require_relative "tomcat-manager/api"
 
 module Tomcat
   module Manager
