@@ -1,6 +1,6 @@
 module Tomcat
   module Manager
-    DEFAULT_PORT           = 9090
+    DEFAULT_PORT           = 8080
     DEFAULT_ADMIN_USERNAME = "admin"
     DEFAULT_ADMIN_PASSWORD = "admin"
 
