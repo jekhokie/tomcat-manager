@@ -38,5 +38,18 @@ describe Tomcat::Manager::Api::Version7 do
             "/host-manager"         => { :status => "running", :sessions => 0, :name => "host-manager"         } }
       end
     end
+
+    describe "application_deployed?" do
+      let(:api)              { FactoryGirl.build :api, :version => "7" }
+      let(:application_list) { File.open(File.dirname(__FILE__) + "/../../fixtures/application_list.txt", "r").read }
+
+      it "returns true for a deployed application" do
+        api.application_deployed?("test-app", "1.0.0", application_list).should == true
+      end
+
+      it "returns false for a non-deployed application" do
+        api.application_deployed?("bogus", "2.0.0", application_list).should == false
+      end
+    end
   end
 end
