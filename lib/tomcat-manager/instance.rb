@@ -83,6 +83,19 @@ module Tomcat
         return application_hash
       end
 
+      def is_application_deployed?(application_name, version)
+        begin
+          raise "Could not connect to server" unless can_connect?
+
+          response           = get_application_list
+          application_status = @api.application_deployed?(application_name, version, response.body)
+        rescue Exception => e
+          raise e.message
+        end
+
+        return application_status
+      end
+
       private
 
       def get_application_list
