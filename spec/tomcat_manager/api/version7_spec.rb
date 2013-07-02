@@ -51,5 +51,18 @@ describe Tomcat::Manager::Api::Version7 do
         api.application_deployed?("bogus", "2.0.0", application_list).should == false
       end
     end
+
+    describe "application_running?" do
+      let(:api)              { FactoryGirl.build :api, :version => "7" }
+      let(:application_list) { File.open(File.dirname(__FILE__) + "/../../fixtures/application_list.txt", "r").read }
+
+      it "returns true for a running application" do
+        api.application_running?("test-app", "1.0.0", application_list).should == true
+      end
+
+      it "returns false for a stopped application" do
+        api.application_running?("other-test-app", "1.0.1", application_list).should == false
+      end
+    end
   end
 end
