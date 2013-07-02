@@ -244,4 +244,73 @@ describe Tomcat::Manager::Instance do
       end
     end
   end
+
+  describe "is_application_running?" do
+    let(:host)             { "my.host"    }
+    let(:port)             { "9001"       }
+    let(:manager_username) { "admin"      }
+    let(:manager_password) { "s3cre7Pas$" }
+    let(:manager_instance) { FactoryGirl.build :instance, :host => host,
+                                                          :port => port,
+                                                          :manager_username => manager_username,
+                                                          :manager_password => manager_password }
+
+    describe "for an application that is running" do
+      before :each do
+        FakeWeb.register_uri(:get, "http://#{manager_username}:#{manager_password}@#{host}:#{port}/manager/text/list",
+                                   :body => File.open(File.dirname(__FILE__) + "/../fixtures/application_list.txt", "r").read,
+                                   :status => [ "200", "OK" ])
+      end
+
+      it "returns true" do
+        manager_instance.is_application_running?("test-app", "1.0.0").should == true
+      end
+    end
+
+    describe "for an application that is stopped" do
+      before :each do
+        FakeWeb.register_uri(:get, "http://#{manager_username}:#{manager_password}@#{host}:#{port}/manager/text/list",
+                                   :body => File.open(File.dirname(__FILE__) + "/../fixtures/application_list.txt", "r").read,
+                                   :status => [ "200", "OK" ])
+      end
+
+      it "returns false" do
+        manager_instance.is_application_running?("other-test-app", "1.0.1").should == false
+      end
+    end
+
+    describe "for an application that is not deployed" do
+      before :each do
+        FakeWeb.register_uri(:get, "http://#{host}:#{port}/manager/text/list",
+                                   :body => File.open(File.dirname(__FILE__) + "/../fixtures/invalid_connect.html", "r").read,
+                                   :status => [ "401", "Unauthorized" ])
+      end
+
+      it "raises an exception" do
+        expect{ manager_instance.is_application_running?("blah", "1.2.1") }.to raise_error
+      end
+    end
+
+    describe "for a non-reachable server" do
+      let(:manager_instance) { FactoryGirl.build :instance }
+
+      it "raises an exception" do
+        expect{ manager_instance.is_application_running?("test-app", "1.0.0") }.to raise_error
+      end
+    end
+
+    describe "for invalid connection credentials" do
+      let(:manager_instance) { FactoryGirl.build :instance, :host => host, :port => port }
+
+      before :each do
+        FakeWeb.register_uri(:get, "http://#{host}:#{port}/manager/text/list",
+                                   :body => File.open(File.dirname(__FILE__) + "/../fixtures/invalid_connect.html", "r").read,
+                                   :status => [ "401", "Unauthorized" ])
+      end
+
+      it "raises an exception" do
+        expect{ manager_instance.is_application_version_running?("test-app", "1.0.0") }.to raise_error
+      end
+    end
+  end
 end
