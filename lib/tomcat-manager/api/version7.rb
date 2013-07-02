@@ -36,6 +36,10 @@ module Tomcat
         def application_deployed?(application_name, version, response)
           ! deployed_applications(response)["/#{application_name}-#{version}"].nil?
         end
+
+        def application_running?(application_name, version, response)
+          deployed_applications(response)["/#{application_name}-#{version}"][:status] == "running"
+        end
       end
     end
   end
