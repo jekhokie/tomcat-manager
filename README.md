@@ -26,17 +26,27 @@ Or install it yourself as:
                                  :opts             => { :api_version => "7" }
 
     # check whether the created server instance can connect to the Tomcat Manager instance
-    server.can_connect?   # true
+    server.can_connect?  # true
 
     # obtain a hash of information for all deployed applications
-    server.application_list   # sample output below:
+    server.application_list  # sample output below:
       #  {
-      #   "/"             => { :status => "running", :sessions => 0, :name => "ROOT"         },
-      #   "/manager"      => { :status => "running", :sessions => 0, :name => "manager"      },
-      #   "/docs"         => { :status => "running", :sessions => 0, :name => "docs"         },
-      #   "/examples"     => { :status => "running", :sessions => 0, :name => "examples"     },
-      #   "/host-manager" => { :status => "running", :sessions => 0, :name => "host-manager" }
+      #   "/"                => { :status => "running", :sessions => 0, :name => "ROOT"         },
+      #   "/manager"         => { :status => "running", :sessions => 0, :name => "manager"      },
+      #   "/docs"            => { :status => "running", :sessions => 0, :name => "docs"         },
+      #   "/examples"        => { :status => "running", :sessions => 0, :name => "examples"     },
+      #   "/host-manager"    => { :status => "running", :sessions => 0, :name => "host-manager" },
+      #   "/test-app-1.0.0"  => { :status => "running", :sessions => 2, :name => "test-app"     },
+      #   "/other-app-2.0.1" => { :status => "stopped", :sessions => 0, :name => "other-app"    }
       #  }
+
+    # determine if an application/version is deployed (samples based on the above application_list output)
+    server.is_application_deployed?("test-app",  "1.0.0")  # true
+    server.is_application_deployed?("bogus-app", "5.0.1")  # false
+
+    # determine if an application/version is running (samples based on the above application_list output)
+    server.is_application_running("test-app",  "1.0.0")  # true
+    server.is_application_running("other-app", "2.0.1")  # false
 
 ## Contributing
 
