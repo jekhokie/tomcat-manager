@@ -32,6 +32,10 @@ module Tomcat
 
           application_list
         end
+
+        def application_deployed?(application_name, version, response)
+          ! deployed_applications(response)["/#{application_name}-#{version}"].nil?
+        end
       end
     end
   end
