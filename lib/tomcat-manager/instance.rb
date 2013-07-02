@@ -96,6 +96,19 @@ module Tomcat
         return application_status
       end
 
+      def is_application_running?(application_name, version)
+        begin
+          raise "Application #{application_name}-#{version} is not deployed" unless is_application_deployed?(application_name, version)
+
+          response           = get_application_list
+          application_status = @api.application_running?(application_name, version, response.body)
+        rescue Exception => e
+          raise e.message
+        end
+
+        return application_status
+      end
+
       private
 
       def get_application_list
